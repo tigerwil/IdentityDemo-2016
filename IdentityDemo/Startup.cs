@@ -47,6 +47,24 @@ namespace IdentityDemo
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            //mwilliams:  Enable Account lockout for protecting against brute force attacks
+            /*
+             * Recommended to user account lockout with 2FA (two-factor authentication).  
+             * Once a user logs in (through local account or social account), each failed attempt at 2FA is store,
+             * and if the maximum attempts (default is 5) is reached, the user is locked out for five minutes 
+             * (you can set the lock out time with DefaultAccountLockoutTimeSpan)
+             * 
+             * The following configures account lockout to be locked for 5 minutes after 3 failed attempts.
+             */ 
+            services.AddIdentity<ApplicationUser, IdentityRole>(config =>
+            {
+                config.SignIn.RequireConfirmedEmail = true; //this was done within the AccountController login post
+                config.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);//this is the default
+                config.Lockout.MaxFailedAccessAttempts = 3; //this is not the default (5)
+            });
+
+
+
             services.AddMvc();
 
             // Add application services.
