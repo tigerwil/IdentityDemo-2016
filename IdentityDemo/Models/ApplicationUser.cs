@@ -40,6 +40,5 @@ namespace IdentityDemo.Models
         [Column(TypeName = "nchar(2)")]
         public string Province { get; set; }
 
-
     }
 }

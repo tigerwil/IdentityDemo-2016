@@ -52,10 +52,16 @@ namespace IdentityDemo
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+
+            //mwilliams:  Register Custom Services
+            services.AddTransient<AdministratorSeedData>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public async void Configure(IApplicationBuilder app, 
+            IHostingEnvironment env, 
+            ILoggerFactory loggerFactory,//mwilliams seeding database
+            AdministratorSeedData seeder)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -83,6 +89,9 @@ namespace IdentityDemo
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            //mwilliams:  Seed administrator data
+            await seeder.EnsureSeedData();
         }
     }
 }
