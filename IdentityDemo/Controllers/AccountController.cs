@@ -142,20 +142,26 @@ namespace IdentityDemo.Controllers
                   //mwilliams:  end custom properties
                 };
                 var result = await _userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
+                if (result.Succeeded)//Account creates successfully
                 {
-                    // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713
-                    // Send an email with this link
-                    //mwilliams:  Enable Account Confirmation
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.Action(nameof(ConfirmEmail), "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                    await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
-                        $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
 
-                    //mwilliams:  Disable Auto sign-in
-                    //await _signInManager.SignInAsync(user, isPersistent: false);
-                    //_logger.LogInformation(3, "User created a new account with password.");
-                    return RedirectToLocal(returnUrl);
+                    //mwilliams:  assign new users to default "user" role
+                    IdentityResult roleResult = await _userManager.AddToRoleAsync(user, "user");
+                    if (roleResult.Succeeded)//role added to user
+                    {
+                        // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713
+                        // Send an email with this link
+                        //mwilliams:  Enable Account Confirmation
+                        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                        var callbackUrl = Url.Action(nameof(ConfirmEmail), "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+                        await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
+                            $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
+
+                        //mwilliams:  Disable Auto sign-in
+                        //await _signInManager.SignInAsync(user, isPersistent: false);
+                        //_logger.LogInformation(3, "User created a new account with password.");
+                        return RedirectToLocal(returnUrl);
+                    }
                 }
                 AddErrors(result);
             }

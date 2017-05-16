@@ -73,6 +73,13 @@ namespace IdentityDemo
 
             //mwilliams:  Register Custom Services
             services.AddTransient<AdministratorSeedData>();
+            services.AddSingleton<IRequestFormDataService, RequestFormDataService>();
+
+            /*
+             * Singleton lifetime services are created the first time they are requested
+             * (or when ConfigureServices is run if you specify the instance there) and
+             * then every subsequent request will use the same instance
+             */
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -15,10 +15,12 @@ namespace IdentityDemo.Models
 
         [Required]
         [StringLength(50)]
+        [Display(Name="First Name")]
         public string FirstName { get; set; }
 
         [Required]
         [StringLength(65)]
+        [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
         [Required]
@@ -33,12 +35,14 @@ namespace IdentityDemo.Models
         [StringLength(7)]
         [Column(TypeName ="nchar(7)")]
         [DataType(DataType.PostalCode)]
+        [Display(Name = "Postal Code")]
         public string PostalCode { get; set; }
 
         [Required]
         [StringLength(2)]
         [Column(TypeName = "nchar(2)")]
         public string Province { get; set; }
+
 
     }
 }
