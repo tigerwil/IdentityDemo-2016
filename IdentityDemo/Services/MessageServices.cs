@@ -19,8 +19,8 @@ namespace IdentityDemo.Services
             //mwilliams 
             //NOTE: using MailKit
             var emailMessage = new MimeMessage();
-            //emailMessage.From.Add(new MailboxAddress("IdentityDemo", "yourGMAIL.com"));
-            emailMessage.From.Add(new MailboxAddress("Identity Demo", "outdoorgear@programming.oultoncollege.com"));
+            emailMessage.From.Add(new MailboxAddress("IdentityDemo", "yourGMAIL.com"));
+ 
             emailMessage.To.Add(new MailboxAddress("",email));
             emailMessage.Subject = subject;
             //default plain text message
@@ -37,8 +37,8 @@ namespace IdentityDemo.Services
                 await client.ConnectAsync("smtp.gmail.com", 465, SecureSocketOptions.SslOnConnect).ConfigureAwait(false);
                 //Note:  Since we don't have an OAuth2 token, need to disable XOAUTH2
                 client.AuthenticationMechanisms.Remove("XOAUTH2");
-                //await client.AuthenticateAsync("yourGMAIL.com", "yourPWD").ConfigureAwait(false);
-                await client.AuthenticateAsync("outdoorgear@programming.oultoncollege.com", "oultons!@#").ConfigureAwait(false);
+                await client.AuthenticateAsync("yourGMAIL.com", "yourPWD").ConfigureAwait(false);
+               
                 await client.SendAsync(emailMessage);
                 await client.DisconnectAsync(true).ConfigureAwait(false);
 
